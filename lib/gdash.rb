@@ -21,11 +21,11 @@ class GDash
         raise "Dashboard templates directory #{@dash_templates} does not exist" unless File.directory?(@dash_templates)
     end
 
-    def dashboard(name, width=nil, height=nil)
+    def dashboard(name, width=nil, height=nil, dates={})
         width ||= @width
         height ||= @height
 
-        Dashboard.new(name, dash_templates, width, height)
+        Dashboard.new(name, dash_templates, width, height, dates[:from_date], dates[:to_date] )
     end
 
     def list
