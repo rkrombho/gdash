@@ -39,7 +39,8 @@ class GraphiteGraph
                    :draw_null_as_zero => false,
                    :major_grid_line_color => nil,
                    :minor_grid_line_color => nil,
-                   :area => :none}.merge(@overrides)
+                   :area => :none,
+                   :color_list => nil}.merge(@overrides)
   end
 
   def [](key)
@@ -266,7 +267,7 @@ class GraphiteGraph
         graphite_target = "drawAsInfinite(#{graphite_target})" if target[:line]
         graphite_target = "movingAverage(#{graphite_target},#{target[:smoothing]})" if target[:smoothing]
 
-        graphite_target = "color(#{graphite_target},\"#{target[:color]}\")" if target[:color]
+        graphite_target = "color(#{graphite_target},\"#{target[:color]}\")" if target[:color] and !properties[:color_list]
         graphite_target = "dashed(#{graphite_target})" if target[:dashed]
         graphite_target = "secondYAxis(#{graphite_target})" if target[:second_y_axis]
 

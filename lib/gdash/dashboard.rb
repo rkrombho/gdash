@@ -2,7 +2,7 @@ class GDash
     class Dashboard
         attr_accessor :properties
 
-        def initialize(short_name, dir, graph_width=500, graph_height=250)
+        def initialize(short_name, dir, graph_width=500, graph_height=250, from_date=nil, to_date=nil)
             raise "Cannot find dashboard directory #{dir}" unless File.directory?(dir)
 
             @properties = {}
@@ -12,6 +12,9 @@ class GDash
             @properties[:yaml] = File.join(dir, short_name, "dash.yaml")
             @properties[:graph_width] = graph_width
             @properties[:graph_height] = graph_height
+            
+            @from = from_date || '-1h'
+            @until = to_date || 'now'
 
             raise "Cannot find YAML file #{yaml}" unless File.exist?(yaml)
 
@@ -25,7 +28,7 @@ class GDash
             graphs = Dir.entries(directory).select{|f| f.match(/\.graph$/)}
 
             graphs.sort.map do |graph|
-                {:name => File.basename(graph, ".graph"), :graphite => GraphiteGraph.new(File.join(directory, graph), {:height => height, :width => width})}
+                {:name => File.basename(graph, ".graph"), :graphite => GraphiteGraph.new(File.join(directory, graph), {:height => height, :width => width, :from => @from, :until => @until})}
             end
         end
 

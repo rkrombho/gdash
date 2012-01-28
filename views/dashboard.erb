@@ -22,6 +22,62 @@
     <% end %>
     </table>
 </div>
+
+<div id="absolute_date" class="modal hide fade">
+    <div class="modal-header">
+        <a href="#" class="close">&times;</a>
+        <h3>absolute date range</h3>
+    </div>
+    <div class="modal-body">
+        <form action="<%= [@prefix, @params[:category], @params[:dash]].join('/') %>" method="GET">
+            <fieldset>
+                <div class="clearfix">
+                    <label for="from_date">from:</label>
+                    <div class="input">
+                        <input type="text" name="from_date" id="from_date" maxlength="16" class="span3" placeholder="mm/dd/yyy hh:mm"/>
+                    </div>
+                </div>
+                <div class="clearfix">
+                    <label for="to_date">to:</label>
+                    <div class="input">
+                        <input type="text" name="to_date" id="to_date" maxlength="16" class="span3" placeholder="mm/dd/yyy hh:mm"/>
+                    </div>
+                </div>
+                <div class="clearfix">
+                    <div class="input">
+                        <button type="submit" class="btn primary">show</button>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>
+<div id="relative_date" class="modal hide fade">
+    <div class="modal-header">
+        <a href="#" class="close">&times;</a>
+        <h3>relativew date</h3>
+    </div>
+    <div class="modal-body">
+        <form action="<%= [@prefix, @params[:category], @params[:dash]].join('/') %>" method="GET">
+            <fieldset>
+                <legend><h5></h5></legend>
+                <div class="clearfix">
+                    <label for="from_date">from now:</label>
+                    <div class="input">
+                        <input type="text" name="from_date" maxlength="4" class="mini"/>
+                        <span class="help-block">X[s,min,h,d,w,mon,y] (e.g. 2mon)</span>
+                    </div>
+                </div>
+                <div class="clearfix">
+                    <div class="input">
+                        <button type="submit" class="btn primary">show</button>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>
+
 <script>
     $(function () {
       $("img[rel=popover-above]")
@@ -42,5 +98,10 @@
           e.preventDefault()
         })
     })
+
+    $(function() {
+      $( "#from_date, #to_date" )
+       .datetimepicker({formattedDate:'mm/dd/yy', formattedTime: 'hh:mm', seperator:'_'});
+    });
 </script>
 <% end %>

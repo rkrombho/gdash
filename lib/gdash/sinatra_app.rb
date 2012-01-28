@@ -82,9 +82,18 @@ class GDash
             erb :full_size_dashboard, :layout => false
 	end
 
-        get '/:category/:dash/' do
+        get '/:category/:dash/?*' do
             if @top_level["#{params[:category]}"].list.include?(params[:dash])
-                @dashboard = @top_level[@params[:category]].dashboard(params[:dash])
+                if params[:from_date] and params[:from_date].split.size > 1
+                    # transforming dates from MM/dd/yyyy hh:mm too hh:mm_MM/DD/YYYY
+                    # see http://graphite.readthedocs.org/en/1.0/url-api.html#from-until
+                    params.merge!(:from_date => "#{params[:from_date].split(' ')[1]}_#{params[:from_date].split(' ')[0]}")
+                elsif params[:from_date]
+                    # if no white space exist we assume a relative date
+                    params.merge!(:from_date => "-#{params[:from_date].strip}")
+                end
+                params.merge!(:to_date => "#{params[:to_date].split(' ')[1]}_#{params[:to_date].split(' ')[0]}") if params[:to_date] 
+                @dashboard = @top_level[@params[:category]].dashboard(params[:dash], nil, nil, params)
             else
                 @error = "No dashboard called #{params[:dash]} found in #{params[:category]}/#{@top_level[params[:category]].list.join ','}."
             end
